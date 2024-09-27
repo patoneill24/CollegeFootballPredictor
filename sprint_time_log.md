@@ -26,11 +26,11 @@ The expected minimum amount of time each Sprint for each category is as follows:
 
 |Date      |Start Time|Category|Description                                 |Total Minutes|
 |----------|----------|:------:|--------------------------------------------|:-----------:|
-|09/24/2024          |  8:30PM        |    IM   |  Created React project and started learning react basics              |    60     |
-|09/25/2024          |  2:15PM        |    TP   |  Project Planning                                                     |    45     |
-|09/25/2024          |  7:40PM        |    IM   |  Learned more React Syntax and practiced added components to webpage  |    80     |
-|9/26/2024           |  8:21PM        |    IM   |  Built Tic-Tac-Toe game from a React Tutorial                         |    86     |
-|          |          |        |                                            |             |
+|09/24/2024          |  8:30PM        |    IM   |  Created React project and started learning react basics                                          |    60     |
+|09/25/2024          |  2:15PM        |    TP   |  Project Planning                                                                                 |    45     |
+|09/25/2024          |  7:40PM        |    IM   |  Learned more React Syntax and practiced added components to webpage                              |    80     |
+|9/26/2024           |  8:21PM        |    IM   |  Built Tic-Tac-Toe game from a React Tutorial                                                     |    86     |
+|9/27/2024           |  10:29AM       |    IM   |  Learned how to keep track of previous versions of game and started planning design of my web app |    120    |
 |          |          |        |                                            |             |
 
 _Note: Add more rows as needed._

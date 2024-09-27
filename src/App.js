@@ -63,11 +63,9 @@ function Square({value, onSquareClick}){
   );
 }
 
-function Board(){
-  const [xIsNext, setXIsNext] = useState(true);
-  const[squares, setSquares] = useState(Array(9).fill(null));
+function Board({xIsNext, squares, onPlay}){
   function handleClick(i){
-    if(squares[i] || calculateWinnder(squares)){
+    if(squares[i] || calculateWinnder(squares) || declareDraw(squares)){
       return;
     }
     const newSquares = squares.slice();
@@ -76,14 +74,16 @@ function Board(){
     }else{
       newSquares[i] = 'O';
     }
-    setSquares(newSquares);
-    setXIsNext(!xIsNext);
+    onPlay(newSquares);
   }
 
   const winner = calculateWinnder(squares);
+  const draw = declareDraw(squares);
   let status;
   if(winner){
     status = 'Winner: ' + winner;
+  }else if(draw){
+    status = 'Draw';
   }else{
     status = 'Next player: ' + (xIsNext ? 'X' : 'O');
   }
@@ -109,6 +109,50 @@ function Board(){
   );
 }
 
+function Game(){
+  const[history, setHistory] = useState([Array(9).fill(null)]);
+  const[currentMove, setCurrentMove] = useState(0);
+  const xIsNext = (currentMove % 2) === 0;
+  const currentSquares = history[currentMove];
+
+  function handlePlay(newSquares) {
+    // Todo
+    const newHistory = [...history.slice(0, currentMove + 1), newSquares];
+    setHistory(newHistory);
+    setCurrentMove(newHistory.length - 1);
+  }
+
+  function jumpTo(nextMove){
+    // Todo
+    setCurrentMove(nextMove);
+  }
+
+  const moves = history.map((squares, move) => {
+    let description;
+    if(move > 0){
+      description = 'Go to move #' + move;
+    }else{
+      description = 'Go to game start';
+    }
+    return (
+      <li key={move}>
+        <button onClick={() => jumpTo(move)}>{description}</button>
+      </li>
+    );
+  });
+  
+  return (
+    <div className = "game">
+      <div className = "game-board">
+        <Board xIsNext = {xIsNext} squares={currentSquares} onPlay = {handlePlay}/>
+      </div>
+      <div className = "game-info">
+        <ol>{moves}</ol>
+        </div>
+    </div>
+  );
+}
+
 function calculateWinnder(squares){
   const lines = [
     [0, 1, 2],//Top row
@@ -129,6 +173,15 @@ function calculateWinnder(squares){
   return null;
 }
 
+function declareDraw(squares){
+  for(let i = 0; i < squares.length; i++){
+    if(squares[i] === null){
+      return false;
+    }
+  }
+  return true;
+}
+
 function App() {
   const [count, setCount] = useState(0);
   function handleClick(){
@@ -143,7 +196,7 @@ function App() {
       <MyButton/>
       <ButtonCounter count= {count} onClick={handleClick}/>
       <ButtonCounter count={count} onClick={handleClick}/>
-      <Board/>
+      <Game/>
       <header className="App-header">
       </header>
     </div>

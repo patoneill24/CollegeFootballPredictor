@@ -33,9 +33,20 @@
 
 .square {
   width: 30px;
-  height: 30px;
+  height: 30px; 
   padding:0%;
   margin:0%;
+}
+
+.board-row {
+  content: "";
+  display: flex;
+  flex-wrap: wrap;
+  width: 14%;
+  height: 14%; 
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
 }
 
 @keyframes App-logo-spin {
