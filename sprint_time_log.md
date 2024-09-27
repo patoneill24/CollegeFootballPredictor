@@ -29,7 +29,7 @@ The expected minimum amount of time each Sprint for each category is as follows:
 |09/24/2024          |  8:30PM        |    IM   |  Created React project and started learning react basics              |    60     |
 |09/25/2024          |  2:15PM        |    TP   |  Project Planning                                                     |    45     |
 |09/25/2024          |  7:40PM        |    IM   |  Learned more React Syntax and practiced added components to webpage  |    80     |
-|          |          |        |                                            |             |
+|9/26/2024           |  8:21PM        |    IM   |  Built Tic-Tac-Toe game from a React Tutorial                         |    86     |
 |          |          |        |                                            |             |
 |          |          |        |                                            |             |
 
