@@ -32,6 +32,8 @@ The expected minimum amount of time each Sprint for each category is as follows:
 |9/26/2024           |  8:21PM        |    IM   |  Built Tic-Tac-Toe game from a React Tutorial               |    86     |
 |9/27/2024           |  10:29AM       |    IM   |  Learned how to keep track of previous versions of game and started planning design of my web app |    120    |
 |9/30/2023          | 2:00PM         |   TP     |  gave out assignments and prepared presentation               |      60       |
+|10/1/2024          |  1:00PM        |   IM     |  Finished WireFrame                                           |      60       |
+|10/2/2024          |  8:00PM        |   IM     |  Started working on the front end of the web app              |      60      |
 
 _Note: Add more rows as needed._
 

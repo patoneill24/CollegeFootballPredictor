@@ -182,6 +182,73 @@ function declareDraw(squares){
   return true;
 }
 
+function Title(){
+  return <div>
+    <h1>2025 CFB Playoff Prediction</h1>
+    <h2>Team Selection</h2>
+  </div>
+}
+
+function Teams(){
+  return(
+    <div className='Teams'>
+      <div className='TeamsBox'>
+        <button>Alabama</button>
+        <button>Texas</button>
+        <button>Ohio State</button>
+        <button>Tennessee</button>
+        <button>Georgia</button>
+        <button>Oregon</button>
+        <button>Penn State</button>
+        <button>Miami FL</button>
+        <button>Missouri</button>
+        <button>Michigan</button>
+        <button>USC</button>
+        <button>Ole Miss</button>
+        <button>LSU</button>
+        <button>Notre Dame</button>
+        <button>Clemson</button>
+        <button>Iowa State</button>
+        <button>BYU</button>
+        <button>Utah</button>
+        <button>Oklahoma</button>
+        <button>Kansas State</button>
+        <button>Boise State</button>
+        <button>Louisville</button>
+        <button>Indiana</button>
+        <button>Illinois</button>
+        <button>Texas A&M</button>
+      </div>
+      <TeamSlots/>
+  </div>
+  );
+}
+
+function TeamSlots(){
+  return <div className='TeamSlots'>
+    <div>1st Seed</div>
+    <div>2nd Seed</div>
+    <div>3rd Seed</div>
+    <div>4th Seed</div>
+    <div>5th Seed</div>
+    <div>6th Seed</div>
+    <div>7th Seed</div>
+    <div>8th Seed</div>
+    <div>9th Seed</div>
+    <div>10th Seed</div>
+    <div>11th Seed</div>
+    <div>12th Seed</div>
+  </div>
+}
+
+function CreateBracket(){
+  return(
+      <div className='BracketButton'>
+        <button>Create Bracket!</button>
+      </div>
+  );
+}
+
 function App() {
   const [count, setCount] = useState(0);
   function handleClick(){
@@ -189,14 +256,9 @@ function App() {
   }
   return (
     <div className="App">
-      <Profile/>
-      {products.map(product => (
-        <Product title={product.title} price={product.price} isGood = {product.isGood}/>
-      ))}
-      <MyButton/>
-      <ButtonCounter count= {count} onClick={handleClick}/>
-      <ButtonCounter count={count} onClick={handleClick}/>
-      <Game/>
+      <Title/>
+      <Teams/>
+      <CreateBracket/>
       <header className="App-header">
       </header>
     </div>
