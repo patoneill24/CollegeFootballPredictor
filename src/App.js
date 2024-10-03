@@ -1,5 +1,8 @@
 import './App.css';
 import { useState } from 'react';
+import {DndProvider} from 'react-dnd';
+import {HTML5Backend} from 'react-dnd-html5-backend';
+import {useDrag} from 'react-dnd';
 
 const user = {
   name: 'John Doe',
@@ -189,40 +192,42 @@ function Title(){
   </div>
 }
 
-function Teams(){
-  return(
-    <div className='Teams'>
-      <div className='TeamsBox'>
-        <button>Alabama</button>
-        <button>Texas</button>
-        <button>Ohio State</button>
-        <button>Tennessee</button>
-        <button>Georgia</button>
-        <button>Oregon</button>
-        <button>Penn State</button>
-        <button>Miami FL</button>
-        <button>Missouri</button>
-        <button>Michigan</button>
-        <button>USC</button>
-        <button>Ole Miss</button>
-        <button>LSU</button>
-        <button>Notre Dame</button>
-        <button>Clemson</button>
-        <button>Iowa State</button>
-        <button>BYU</button>
-        <button>Utah</button>
-        <button>Oklahoma</button>
-        <button>Kansas State</button>
-        <button>Boise State</button>
-        <button>Louisville</button>
-        <button>Indiana</button>
-        <button>Illinois</button>
-        <button>Texas A&M</button>
-      </div>
-      <TeamSlots/>
+function TeamsBox(){
+  const [{isDragging}, drag] = useDrag(() => ({
+    type: 'box',
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+  }));
+  return <div className='TeamsBox'>
+    <button ref={drag}>Alabama</button>
+    <button ref={drag}>Texas</button>
+    <button ref={drag}>Ohio State</button>
+    <button ref={drag}>Tennessee</button>
+    <button ref={drag}>Georgia</button>
+    <button ref={drag}>Oregon</button>
+    <button ref={drag}>Penn State</button>
+    <button ref={drag}>Miami FL</button>
+    <button ref={drag}>Missouri</button>
+    <button ref={drag}>Michigan</button>
+    <button ref={drag}>USC</button>
+    <button ref={drag}>Ole Miss</button>
+    <button ref={drag}>LSU</button>
+    <button ref={drag}>Notre Dame</button>
+    <button ref={drag}>Clemson</button>
+    <button ref={drag}>Iowa State</button>
+    <button ref={drag}>BYU</button>
+    <button ref={drag}>Utah</button>
+    <button ref={drag}>Oklahoma</button>
+    <button ref={drag}>Kansas State</button>
+    <button ref={drag}>Boise State</button>
+    <button ref={drag}>Louisville</button>
+    <button ref={drag}>Indiana</button>
+    <button ref={drag}>Illinois</button>
+    <button ref={drag}>Texas A&M</button>
   </div>
-  );
 }
+
 
 function TeamSlots(){
   return <div className='TeamSlots'>
@@ -241,6 +246,15 @@ function TeamSlots(){
   </div>
 }
 
+function Teams(){
+  return(
+    <div className='Teams'>
+        <TeamsBox/>
+        <TeamSlots/>
+    </div>
+  );
+}
+
 function CreateBracket(){
   return(
       <div className='BracketButton'>
@@ -255,13 +269,15 @@ function App() {
     setCount(count + 1);
   }
   return (
-    <div className="App">
-      <Title/>
-      <Teams/>
-      <CreateBracket/>
-      <header className="App-header">
-      </header>
-    </div>
+    <DndProvider backend={HTML5Backend}>
+      <div className="App">
+        <Title/>
+        <Teams/>
+        <CreateBracket/>
+        <header className="App-header">
+        </header>
+      </div>
+    </DndProvider>
   );
 }
 
