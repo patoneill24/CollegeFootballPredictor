@@ -3,6 +3,7 @@ import { useState } from 'react';
 import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 import {useDrag} from 'react-dnd';
+import {useDrop} from 'react-dnd';
 
 const user = {
   name: 'John Doe',
@@ -192,65 +193,96 @@ function Title(){
   </div>
 }
 
-function TeamsBox(){
+const teams = [
+  {name: 'Alabama'},
+  {name: 'Texas'},
+  {name: 'Ohio State'},
+  {name: 'Tennessee'},
+  {name: 'Georgia'},
+  {name: 'Oregon'},
+  {name: 'Penn State'},
+  {name: 'Miami FL'},
+  {name: 'Missouri'},
+  {name: 'Michigan'},
+  {name: 'USC'},
+  {name: 'Ole Miss'},
+  {name: 'LSU'},
+  {name: 'Notre Dame'},
+  {name: 'Clemson'},
+  {name: 'Iowa State'},
+  {name: 'BYU'},
+  {name: 'Utah'},
+  {name: 'Oklahoma'},
+  {name: 'Kansas State'},
+  {name: 'Boise State'},
+  {name: 'Louisville'},
+  {name: 'Indiana'},
+  {name: 'Illinois'},
+  {name: 'Texas A&M'}
+];
+
+function Team({name}){
   const [{isDragging}, drag] = useDrag(() => ({
     type: 'box',
+    item: {name},
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   }));
-  return <div className='TeamsBox'>
-    <button ref={drag}>Alabama</button>
-    <button ref={drag}>Texas</button>
-    <button ref={drag}>Ohio State</button>
-    <button ref={drag}>Tennessee</button>
-    <button ref={drag}>Georgia</button>
-    <button ref={drag}>Oregon</button>
-    <button ref={drag}>Penn State</button>
-    <button ref={drag}>Miami FL</button>
-    <button ref={drag}>Missouri</button>
-    <button ref={drag}>Michigan</button>
-    <button ref={drag}>USC</button>
-    <button ref={drag}>Ole Miss</button>
-    <button ref={drag}>LSU</button>
-    <button ref={drag}>Notre Dame</button>
-    <button ref={drag}>Clemson</button>
-    <button ref={drag}>Iowa State</button>
-    <button ref={drag}>BYU</button>
-    <button ref={drag}>Utah</button>
-    <button ref={drag}>Oklahoma</button>
-    <button ref={drag}>Kansas State</button>
-    <button ref={drag}>Boise State</button>
-    <button ref={drag}>Louisville</button>
-    <button ref={drag}>Indiana</button>
-    <button ref={drag}>Illinois</button>
-    <button ref={drag}>Texas A&M</button>
-  </div>
+  return(
+      <button ref={drag}>{name}</button>
+  )
 }
 
-
-function TeamSlots(){
-  return <div className='TeamSlots'>
-    <div>1st Seed</div>
-    <div>2nd Seed</div>
-    <div>3rd Seed</div>
-    <div>4th Seed</div>
-    <div>5th Seed</div>
-    <div>6th Seed</div>
-    <div>7th Seed</div>
-    <div>8th Seed</div>
-    <div>9th Seed</div>
-    <div>10th Seed</div>
-    <div>11th Seed</div>
-    <div>12th Seed</div>
-  </div>
-}
 
 function Teams(){
+  const [TopTeams, setTeams] = useState([
+    {name:'Drag Teams here'},
+    // {name:'2nd Seed'},
+    // {name:'3rd Seed'},
+    // {name:'4th Seed'},
+    // {name:'5th Seed'},
+    // {name:'6th Seed'},
+    // {name:'7th Seed'},
+    // {name:'8th Seed'},
+    // {name:'9th Seed'},
+    // {name:'10th Seed'},
+    // {name:'11th Seed'},
+    // {name:'12th Seed'}
+  ]);
+
+  const [{isOver}, drop] = useDrop(() => ({
+    accept: 'box',
+    drop: (item) => moveTeam(item.name),
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+    }),
+  }));
+
+  const moveTeam = (name) => {
+    // const newTeams = TopTeams.slice();
+    // for(let i = 0; i < newTeams.length; i++){
+    //   if(newTeams[i].name === name){
+    //     newTeams[i].name = 'Open Slot';
+    //   }
+    // }
+    // setTeams(newTeams);
+    const newTeams = teams.filter((team) => name === team.name);
+    setTeams(topTeams => [...topTeams, newTeams[0]]);
+  };
+
   return(
     <div className='Teams'>
-        <TeamsBox/>
-        <TeamSlots/>
+      <div className='TeamsBox'>
+        {teams.map((team) => (
+          <Team name={team.name}/>
+        ))}
+      </div>
+      <div className='TeamSlots' ref={drop}> 
+          {TopTeams.map((team) => (
+            <div>{team.name}</div>
+          ))}
+      </div>
     </div>
   );
 }
