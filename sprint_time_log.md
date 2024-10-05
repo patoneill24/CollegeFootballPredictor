@@ -35,7 +35,9 @@ The expected minimum amount of time each Sprint for each category is as follows:
 |10/1/2024          |  1:00PM        |   IM     |  Finished WireFrame                                           |      60       |
 |10/2/2024          |  8:00PM        |   IM     |  Started working on the front end of the web app              |      60      |
 |10/3/2024          |  2:13PM        |   IM     |  Continued working on the front end of the web app            |      53      |
-|10/4/2024          |  8:00PM        |   IM     |  Continued working on the front end of the web app            |      90      |
+|10/3/2024          |  8:00PM        |   IM     |  Continued working on the front end of the web app            |      90      |
+|10/4/2024          |  10:45AM        |   IM     |  Started Implementing Bracket Feature           |     110      |
+|10/4/2024          |  8:29PM        |   IM     |  Continued Implementing Bracket Feature           |     120      |
 
 _Note: Add more rows as needed._
 

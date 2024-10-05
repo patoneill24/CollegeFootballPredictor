@@ -4,6 +4,8 @@ import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 import {useDrag} from 'react-dnd';
 import {useDrop} from 'react-dnd';
+import React, {useEffect } from 'react';
+
 
 const user = {
   name: 'John Doe',
@@ -230,26 +232,131 @@ function Team({name}){
     }),
   }));
   return(
-      <button ref={drag}>{name}</button>
+      <>
+        <button ref={drag}>{name}</button>
+      </>
   )
 }
 
 
+
+
 function Teams(){
-  const [TopTeams, setTeams] = useState([
-    {name:'Drag Teams here'},
-    // {name:'2nd Seed'},
-    // {name:'3rd Seed'},
-    // {name:'4th Seed'},
-    // {name:'5th Seed'},
-    // {name:'6th Seed'},
-    // {name:'7th Seed'},
-    // {name:'8th Seed'},
-    // {name:'9th Seed'},
-    // {name:'10th Seed'},
-    // {name:'11th Seed'},
-    // {name:'12th Seed'}
-  ]);
+  const [topTeams, setTeams] = useState([]);
+
+  const fillers = [
+    {name:'Winner of Match 1'},
+    {name:'Winner of Match 2'},
+    {name:'Winner of Match 3'},
+    {name:'Winner of Match 4'}
+  ]
+  // const matches = [
+  //   {
+  //     id:1,
+  //     name: 'Match 1',
+  //     nextMatchId: 5,
+  //     round: rounds[0],
+  //     teams: [
+  //       topTeams[11],
+  //       topTeams[4]
+  //     ]
+  //   },
+  //   {
+  //     id:2,
+  //     name: 'Match 2',
+  //     nextMatchId: 6,
+  //     round: rounds[0],
+  //     teams: [
+  //       topTeams[8],
+  //       topTeams[7]
+  //     ]
+  //   },
+  //   {
+  //     id:3,
+  //     name: 'Match 3',
+  //     nextMatchId: 7,
+  //     round: rounds[0],
+  //     teams: [
+  //       topTeams[10],
+  //       topTeams[5]
+  //     ]
+  //   },
+  //   {
+  //     id:4,
+  //     name: 'Match 4',
+  //     nextMatchId: 8,
+  //     round: rounds[0],
+  //     teams: [
+  //       topTeams[9],
+  //       topTeams[6]
+  //     ]
+  //   },
+  //   {
+  //     id:5,
+  //     name: 'Match 5',
+  //     nextMatchId: null,
+  //     round: rounds[1],
+  //     teams: [
+  //       topTeams[3],
+  //       fillers[0]
+  //     ]
+  //   },
+  //   {
+  //     id:6,
+  //     name: 'Match 6',
+  //     nextMatchId: null,
+  //     round: rounds[1],
+  //     teams: [
+  //       topTeams[0],
+  //       fillers[1]
+  //     ]
+  //   },
+  //   {
+  //     id:7,
+  //     name: 'Match 7',
+  //     nextMatchId: null,
+  //     round: rounds[1],
+  //     teams: [
+  //       fillers[2],
+  //       topTeams[2]
+  //     ]
+  //   },
+  //   {
+  //     id:8,
+  //     name: 'Match 8',
+  //     nextMatchId: null,
+  //     round: rounds[1],
+  //     teams: [
+  //       fillers[3],
+  //       topTeams[1]
+  //     ]
+  //   }
+  // ];
+
+  const rounds = [
+    {name: 'Round 1'
+    ,matches: [
+      {name: 'Match 1', teams: [topTeams[11],topTeams[4]]},
+      {name: 'Match 2', teams: [topTeams[8],topTeams[7]]},
+      {name: 'Match 3', teams: [topTeams[10],topTeams[5]]},
+      {name: 'Match 4', teams: [topTeams[9],topTeams[6]]}
+    ]},
+    {name: 'Quarterfinals',
+    matches: [
+      {name: 'Match 5', teams: [topTeams[3], fillers[0]]},
+      {name: 'Match 6', teams: [topTeams[0], fillers[1]]},
+      {name: 'Match 7', teams: [topTeams[2], fillers[2]]},
+      {name: 'Match 8', teams: [topTeams[1], fillers[3]]}
+    ]}
+  ];
+
+  useEffect(() => {
+    console.log('Updated topTeams:', topTeams);
+    if(topTeams.length === 12){
+      alert('Bracket is full!');
+    }
+  }, [topTeams]
+  );
 
   const [{isOver}, drop] = useDrop(() => ({
     accept: 'box',
@@ -260,52 +367,76 @@ function Teams(){
   }));
 
   const moveTeam = (name) => {
-    // const newTeams = TopTeams.slice();
-    // for(let i = 0; i < newTeams.length; i++){
-    //   if(newTeams[i].name === name){
-    //     newTeams[i].name = 'Open Slot';
-    //   }
-    // }
-    // setTeams(newTeams);
-    const newTeams = teams.filter((team) => name === team.name);
+
+    const newTeams = teams.filter((team) => team.name === name);
     setTeams(topTeams => [...topTeams, newTeams[0]]);
   };
 
+  const [showBracket, setShowBracket] = useState(false);
+
+  function handleClick(){
+    if(topTeams.length < 12){
+      alert('Please select 12 teams to create a bracket');
+      return;
+    }
+    setShowBracket(true);
+  }
+
   return(
-    <div className='Teams'>
-      <div className='TeamsBox'>
-        {teams.map((team) => (
-          <Team name={team.name}/>
-        ))}
-      </div>
-      <div className='TeamSlots' ref={drop}> 
-          {TopTeams.map((team) => (
-            <div>{team.name}</div>
+    <>
+      <div className='Teams'>
+        <div className='TeamsBox'>
+          <h2>Top 25 Teams</h2>
+          {teams.map((team) => (
+            <Team name={team.name}/>
           ))}
+        </div>
+        <div className='TeamSlots' ref={drop}> 
+          <h2>Drap Top 12 Teams Here</h2>
+            {topTeams.map((team) => (
+              <button className='Slot'>{team.name}</button>
+            ))}
+        </div>
       </div>
-    </div>
+      <div className='BracketButton'>
+        <button onClick={()=> handleClick()}>Create Bracket!</button>
+        {showBracket && <Bracket rounds = {rounds}/>}
+      </div>
+    </>
   );
 }
 
-function CreateBracket(){
+
+
+function Bracket ({rounds}) {
   return(
-      <div className='BracketButton'>
-        <button>Create Bracket!</button>
+  <div className='Bracket'>
+    {rounds.map((round,roundIndex) => (
+      <div className='Round' key={roundIndex}>
+        <h2>{round.name}</h2>
+      {round.matches.map((match,matchIndex) => (
+        <div className='Match' key={matchIndex}>
+          <h3>{match.name}</h3>
+          <div className='Teams1'>
+            {match.teams.map((team,teamIndex) => (
+              <div className='Team' key={teamIndex}>{team.name}</div>
+            ))}
+          </div>
+        </div>
+      ))}
       </div>
+    ))}
+  </div>
   );
 }
+
 
 function App() {
-  const [count, setCount] = useState(0);
-  function handleClick(){
-    setCount(count + 1);
-  }
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="App">
         <Title/>
         <Teams/>
-        <CreateBracket/>
         <header className="App-header">
         </header>
       </div>

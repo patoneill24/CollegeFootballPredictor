@@ -81,11 +81,11 @@
   height: 375px;
   max-height: fit-content;
   overflow-y: auto;
-  div{
+}
+
+.Slot{
     margin: 5px;
-    width: 40%;
-    border: dashed 1px black;
-  }
+    width: 50%;
 }
 .BracketButton{
   justify-content: center;
@@ -100,6 +100,26 @@
     border-radius: 15px;
     margin: 10px;
   }
+}
+
+.bracket {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.Match{
+  padding: 10px;
+  margin: 5px 0;
+  width: 150px;
+  text-align: center;
+}
+
+.Team{
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 5px;
+  width: 150px;
 }
 
 @keyframes App-logo-spin {
