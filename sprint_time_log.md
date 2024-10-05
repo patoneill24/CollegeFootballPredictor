@@ -41,7 +41,8 @@ The expected minimum amount of time each Sprint for each category is as follows:
 |10/4/2024           |  10:45AM       |    IM    |  Started Implementing Bracket Feature                        |    110     |
 |10/4/2024           |  8:29PM        |    IM    |  Continued Implementing Bracket Feature                      |    120     |
 |10/5/2024           |  12:30PM       |    IM    |  Continued Implementing Bracket Feature                      |    90      |
-|10/5/2024           |  2:30PM        |    TP    |  React Practice                                              |    60      |
+|10/5/2024           |  2:30PM        |    TP    |  React Practice with use state                               |    60      |
+|10/5/2024           |  4:00PM        |    IM    |  Create ReadMe File                                          |    45      |
 
 _Note: Add more rows as needed._
 
@@ -49,10 +50,10 @@ _Note: Add more rows as needed._
 
 |Categroy                       |Total Time (Hours:Minutes)|
 |-------------------------------|:------------------------:|
-|IM - Individual Module         |         14:36            |
-|TP - Team Project              |         3 :00            |
+|IM - Individual Module         |         16:14            |
+|TP - Team Project              |         3:00             |
 |MTG - Class Meetings           |         2:00             |
-|**TOTAL**                      |         19:36            |
+|**TOTAL**                      |         21:14            |
 
 
 _Note: I only have 2 hours worth of class meetings because class was cancelled  for two days._

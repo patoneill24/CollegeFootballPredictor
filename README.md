@@ -1,3 +1,52 @@
+## Overview
+
+**Project Title**: CFB Playoff Predictor
+
+**Project Description**: Users can predict which teams will make the College Football Playoffs and view how the playoff bracket will look based on their predictions.
+
+**Project Goals**: The goal is to provide a fun and ineractive way for people to predict the College Football Playoff teams and see how the playoff bracket will look based on their predictions.
+
+## Instructions for Build and Use
+
+Steps to build and/or run the software:
+1. Install nvm on your computer to ensure you have the latest version of Node.js. (you'll need version 14.0 or later)
+2. run `npm run build` to build the web app.
+
+Instructions for using the software:
+
+1. Drag and drop the teams who you think will make the playoffs.
+2. Once you dragged and dropped 12 teams, click the 'Create Bracket' button to see the playoff bracket.
+
+## Development Environment 
+
+To recreate the development environment, you need the following software and/or libraries with the specified versions:
+
+* run `npx create-react-app my-ap cd my-app` to create a new React app.
+* run `npm start` to start the app. run `npm install react-dnd` and `npm install react-dnd-html5-backend` to install libraries * necessary for drag and drop. 
+
+## Useful Websites to Learn More
+
+I found these websites useful in developing this software:
+
+* [React-dev](https://react.dev)
+* [React-dnd](https://react-dnd.github.io/react-dnd/about)
+* [React-dnd-tutorial](https://www.youtube.com/watch?v=4bzJrEETW4w)
+
+## Future Work
+
+The following items I plan to fix, improve, and/or add to this project in the future:
+
+* [ ] Add a feature to allow users to predict the playoff games.
+* [ ] Add a feature to allow users to predict the national championship game and score.
+* [ ] Add a feature to allow users to recieve a score based on how accurate their predictions were.
+* [ ] Add a feature to allow users to create an account and save their predictions.
+* [ ] Add a feature to allow users to view other users' predictions on a leaderboard.
+
+
+
+Below is Some Information on the Create React App that was provided when the project was created:
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
