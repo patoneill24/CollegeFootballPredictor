@@ -62,7 +62,7 @@
   align-items: center;
   background-color: lightgray;
   width: 40%;
-  height: 372px;
+  height: 450px;
   max-height: fit-content;
   overflow-y: auto;
   button{
@@ -78,7 +78,7 @@
   align-items: center;
   background-color: lightgray;
   width: 40%;
-  height: 375px;
+  height: 450px;
   max-height: fit-content;
   overflow-y: auto;
 }
@@ -102,10 +102,64 @@
   }
 }
 
-.bracket {
+.round-0{
   display: flex;
+  flex-direction: column;
   justify-content: space-around;
-  padding: 20px;
+  align-items: center;
+  h2{
+    text-align: center;
+  }
+} 
+
+.round-1{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  h2{
+    text-align: center;
+  }
+}
+
+.round-2{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 75px;
+  h2{
+    text-align: center;
+  }
+}
+
+.round-3{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 150px;
+  h2{
+    text-align: center;
+  }
+}
+
+.round-4{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 165px;
+  h2{
+    text-align: center;
+  }
+}
+
+.Bracket {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 
 .Match{
@@ -113,6 +167,9 @@
   margin: 5px 0;
   width: 150px;
   text-align: center;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .Team{

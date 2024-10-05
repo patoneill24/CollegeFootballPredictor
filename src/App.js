@@ -195,7 +195,7 @@ function Title(){
   </div>
 }
 
-const teams = [
+const initialTeams = [
   {name: 'Alabama'},
   {name: 'Texas'},
   {name: 'Ohio State'},
@@ -223,10 +223,17 @@ const teams = [
   {name: 'Texas A&M'}
 ];
 
-function Team({name}){
+function Team({name, onDrop}){
+  
   const [{isDragging}, drag] = useDrag(() => ({
     type: 'box',
     item: {name},
+    end: (item, monitor) => {
+      const dropResult = monitor.getDropResult();
+      if(item && dropResult){
+        onDrop(item.name);
+      }
+    },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -243,95 +250,20 @@ function Team({name}){
 
 function Teams(){
   const [topTeams, setTeams] = useState([]);
-
+  const [teams, setAvailableTeams] = useState(initialTeams);
   const fillers = [
     {name:'Winner of Match 1'},
     {name:'Winner of Match 2'},
     {name:'Winner of Match 3'},
-    {name:'Winner of Match 4'}
-  ]
-  // const matches = [
-  //   {
-  //     id:1,
-  //     name: 'Match 1',
-  //     nextMatchId: 5,
-  //     round: rounds[0],
-  //     teams: [
-  //       topTeams[11],
-  //       topTeams[4]
-  //     ]
-  //   },
-  //   {
-  //     id:2,
-  //     name: 'Match 2',
-  //     nextMatchId: 6,
-  //     round: rounds[0],
-  //     teams: [
-  //       topTeams[8],
-  //       topTeams[7]
-  //     ]
-  //   },
-  //   {
-  //     id:3,
-  //     name: 'Match 3',
-  //     nextMatchId: 7,
-  //     round: rounds[0],
-  //     teams: [
-  //       topTeams[10],
-  //       topTeams[5]
-  //     ]
-  //   },
-  //   {
-  //     id:4,
-  //     name: 'Match 4',
-  //     nextMatchId: 8,
-  //     round: rounds[0],
-  //     teams: [
-  //       topTeams[9],
-  //       topTeams[6]
-  //     ]
-  //   },
-  //   {
-  //     id:5,
-  //     name: 'Match 5',
-  //     nextMatchId: null,
-  //     round: rounds[1],
-  //     teams: [
-  //       topTeams[3],
-  //       fillers[0]
-  //     ]
-  //   },
-  //   {
-  //     id:6,
-  //     name: 'Match 6',
-  //     nextMatchId: null,
-  //     round: rounds[1],
-  //     teams: [
-  //       topTeams[0],
-  //       fillers[1]
-  //     ]
-  //   },
-  //   {
-  //     id:7,
-  //     name: 'Match 7',
-  //     nextMatchId: null,
-  //     round: rounds[1],
-  //     teams: [
-  //       fillers[2],
-  //       topTeams[2]
-  //     ]
-  //   },
-  //   {
-  //     id:8,
-  //     name: 'Match 8',
-  //     nextMatchId: null,
-  //     round: rounds[1],
-  //     teams: [
-  //       fillers[3],
-  //       topTeams[1]
-  //     ]
-  //   }
-  // ];
+    {name:'Winner of Match 4'},
+    {name:'Winner of Match 5'},
+    {name:'Winner of Match 6'},
+    {name:'Winner of Match 7'},
+    {name:'Winner of Match 8'},
+    {name:'Winner of Match 9'},
+    {name:'Winner of Match 10'},
+    {name:'Winner of Match 11'},
+  ];
 
   const rounds = [
     {name: 'Round 1'
@@ -343,34 +275,65 @@ function Teams(){
     ]},
     {name: 'Quarterfinals',
     matches: [
-      {name: 'Match 5', teams: [topTeams[3], fillers[0]]},
-      {name: 'Match 6', teams: [topTeams[0], fillers[1]]},
-      {name: 'Match 7', teams: [topTeams[2], fillers[2]]},
-      {name: 'Match 8', teams: [topTeams[1], fillers[3]]}
-    ]}
+      {name: 'Match 5', teams: [fillers[0], topTeams[3]]},
+      {name: 'Match 6', teams: [fillers[1], topTeams[0]]},
+      {name: 'Match 7', teams: [fillers[2], topTeams[2]]},
+      {name: 'Match 8', teams: [ fillers[3], topTeams[1],]}
+    ]},
+    {name: 'Semifinals',
+    matches: [
+      {name: 'Match 9', teams: [fillers[4], fillers[5]]},
+      {name: 'Match 10', teams: [fillers[6], fillers[7]]}
+    ]},
+    {name: 'Championship',
+    matches: [
+      {name: 'Match 11', teams: [fillers[8], fillers[9]]}
+    ]},
+    {name: 'Champion',
+    matches: [
+      {name: 'National Champion', teams: [fillers[10]]}
+    ]
+    }
   ];
 
   useEffect(() => {
-    console.log('Updated topTeams:', topTeams);
     if(topTeams.length === 12){
-      alert('Bracket is full!');
+      alert('Bracket is full!')
     }
+    setAvailableTeams(teams.filter((team) => !topTeams.includes(team)));
   }, [topTeams]
   );
 
-  const [{isOver}, drop] = useDrop(() => ({
-    accept: 'box',
-    drop: (item) => moveTeam(item.name),
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-    }),
-  }));
+  function DropZone({onDrop}){
+    const [{isOver}, drop] = useDrop(() => ({
+      accept: 'box',
+      drop: (item) => onDrop(item.name),
+      collect: (monitor) => ({
+        isOver: monitor.isOver(),
+      }),
+    }));
+    return (
+      <div className='TeamSlots' ref={drop}> 
+        <h2>Drop Top 12 Teams Here</h2>
+          {topTeams.map((team) => (
+            <button className='Slot'>{team.name}</button>
+          ))}
+      </div>
+    );
+  }
 
   const moveTeam = (name) => {
 
-    const newTeams = teams.filter((team) => team.name === name);
+    const newTeams = teams.filter((team) => name === team.name);
+    const newAvailableTeams = teams.filter((team) => name !== team.name);
     setTeams(topTeams => [...topTeams, newTeams[0]]);
+    setAvailableTeams(newAvailableTeams);
   };
+
+  const handleDrag = (name) => {
+    const newAvailableTeams = teams.filter((team) => name !== team.name);
+    setAvailableTeams(newAvailableTeams);
+  }
 
   const [showBracket, setShowBracket] = useState(false);
 
@@ -388,15 +351,10 @@ function Teams(){
         <div className='TeamsBox'>
           <h2>Top 25 Teams</h2>
           {teams.map((team) => (
-            <Team name={team.name}/>
+            <Team key={team.name} name={team.name} onDrop={handleDrag}/>
           ))}
         </div>
-        <div className='TeamSlots' ref={drop}> 
-          <h2>Drap Top 12 Teams Here</h2>
-            {topTeams.map((team) => (
-              <button className='Slot'>{team.name}</button>
-            ))}
-        </div>
+        <DropZone onDrop={moveTeam}/>
       </div>
       <div className='BracketButton'>
         <button onClick={()=> handleClick()}>Create Bracket!</button>
@@ -412,7 +370,7 @@ function Bracket ({rounds}) {
   return(
   <div className='Bracket'>
     {rounds.map((round,roundIndex) => (
-      <div className='Round' key={roundIndex}>
+      <div key={roundIndex} className={`round-${roundIndex}`}>
         <h2>{round.name}</h2>
       {round.matches.map((match,matchIndex) => (
         <div className='Match' key={matchIndex}>
