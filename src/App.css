@@ -174,11 +174,15 @@
   align-items: center;
 }
 
-.Team{
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 5px;
-  width: 150px;
+.Teams1{
+  button{
+    background-color: lightgray;
+    border: 1px solid #ccc;
+    color:black;
+    padding: 10px;
+    margin: 5px;
+    width: 150px;
+  }
 }
 
 @keyframes App-logo-spin {

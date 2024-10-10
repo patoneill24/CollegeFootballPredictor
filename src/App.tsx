@@ -7,6 +7,32 @@ import {useDrop} from 'react-dnd';
 import React, {useEffect } from 'react';
 
 
+interface Team {
+  name: string;
+}
+
+interface Match {
+  name: string;
+  teams: Team[];
+}
+
+interface Round {
+  name: string;
+  matches: Match[];
+}
+
+interface BracketProps {
+  rounds: Round[];
+}
+
+interface DropZoneProps {
+  onDrop: (name: string) => void;
+}
+
+interface Item {
+  name: string;
+}
+
 function Title(){
   return <div>
     <h1>2025 CFB Playoff Prediction</h1>
@@ -42,17 +68,11 @@ const initialTeams = [
   {name: 'Texas A&M'}
 ];
 
-function TeamSelection({name}){
+function TeamSelection({name}:Team){
   
-  const [{isDragging}, drag] = useDrag(() => ({
+  const [, drag] = useDrag(() => ({
     type: 'box',
     item: {name},
-    // end: (item, monitor) => {
-    //   const dropResult = monitor.getDropResult();
-    //   if(item && dropResult){
-    //     onDrop(item.name);
-    //   }
-    // },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -65,48 +85,47 @@ function TeamSelection({name}){
 }
 
 
-function Bracket ({rounds}) {
-  return(
-  <div className='Bracket'>
-    {rounds.map((round,roundIndex) => (
-      <div key={roundIndex} className={`round-${roundIndex}`}>
-        <h2>{round.name}</h2>
-      {round.matches.map((match,matchIndex) => (
-        <div className='Match' key={matchIndex}>
-          <h3>{match.name}</h3>
-          <div className='Teams1'>
-            {match.teams.map((team,teamIndex) => (
-              <div className='Team' key={teamIndex}>{team.name}</div>
-            ))}
-          </div>
-        </div>
-      ))}
-      </div>
-    ))}
-  </div>
-  );
-}
+// function Bracket ({rounds}:BracketProps) {
+//   return(
+//   <div className='Bracket'>
+//     {rounds.map((round,roundIndex) => (
+//       <div key={roundIndex} className={`round-${roundIndex}`}>
+//         <h2>{round.name}</h2>
+//       {round.matches.map((match,matchIndex) => (
+//         <div className='Match' key={matchIndex}>
+//           <h3>{match.name}</h3>
+//           <div className='Teams1'>
+//             {match.teams.map((team,teamIndex) => (
+//               <button className='Team' key={teamIndex}>{team.name}</button>
+//             ))}
+//           </div>
+//         </div>
+//       ))}
+//       </div>
+//     ))}
+//   </div>
+//   );
+// }
 
-
+const fillers = [
+  {name:'Winner of Match 1'},
+  {name:'Winner of Match 2'},
+  {name:'Winner of Match 3'},
+  {name:'Winner of Match 4'},
+  {name:'Winner of Match 5'},
+  {name:'Winner of Match 6'},
+  {name:'Winner of Match 7'},
+  {name:'Winner of Match 8'},
+  {name:'Winner of Match 9'},
+  {name:'Winner of Match 10'},
+  {name:'Winner of Match 11'},
+];
 
 function CreateBracket(){
-  const [topTeams, setTeams] = useState([]);
+  const [topTeams, setTeams] = useState<Team[]>([]);
   const [teams, setAvailableTeams] = useState(initialTeams);
-  const fillers = [
-    {name:'Winner of Match 1'},
-    {name:'Winner of Match 2'},
-    {name:'Winner of Match 3'},
-    {name:'Winner of Match 4'},
-    {name:'Winner of Match 5'},
-    {name:'Winner of Match 6'},
-    {name:'Winner of Match 7'},
-    {name:'Winner of Match 8'},
-    {name:'Winner of Match 9'},
-    {name:'Winner of Match 10'},
-    {name:'Winner of Match 11'},
-  ];
 
-  const rounds = [
+  const initalRounds = [
     {name: 'Round 1'
     ,matches: [
       {name: 'Match 1', teams: [topTeams[11],topTeams[4]]},
@@ -137,6 +156,45 @@ function CreateBracket(){
     }
   ];
 
+  const [rounds, setRounds] = useState<Round[]>(initalRounds);
+  function HandleClick(roundIndex: number, matchIndex: number, teamIndex: number) {
+    const newRounds = [...rounds];
+    const currentMatch = newRounds[roundIndex].matches[matchIndex];
+    const advancingTeam = currentMatch.teams[teamIndex];
+
+    if (roundIndex + 1 < newRounds.length) {
+      const nextRound = newRounds[roundIndex + 1];
+      const nextMatch = nextRound.matches.find(match => match.teams.includes(fillers[matchIndex]));
+
+      if (nextMatch) {
+        nextMatch.teams = nextMatch.teams.map(team => team.name.includes('Winner') ? advancingTeam : team);
+      }
+    }
+    setRounds(newRounds);
+  }
+
+  function Bracket ({rounds}:BracketProps) {
+    return(
+    <div className='Bracket'>
+      {rounds.map((round,roundIndex) => (
+        <div key={roundIndex} className={`round-${roundIndex}`}>
+          <h2>{round.name}</h2>
+        {round.matches.map((match,matchIndex) => (
+          <div className='Match' key={matchIndex}>
+            <h3>{match.name}</h3>
+            <div className='Teams1'>
+              {match.teams.map((team,teamIndex) => (
+                <button onClick= {()=>HandleClick(roundIndex,matchIndex,teamIndex)} className='Team' key={teamIndex}>{team.name}</button>
+              ))}
+            </div>
+          </div>
+        ))}
+        </div>
+      ))}
+    </div>
+    );
+  }
+
   useEffect(() => {
     if(topTeams.length === 12){
       alert('Bracket is full!')
@@ -144,8 +202,8 @@ function CreateBracket(){
   }, [topTeams]
   );
 
-  function DropZone({onDrop}){
-    const [{isOver}, drop] = useDrop(() => ({
+  function DropZone({onDrop}: DropZoneProps) {
+    const [, drop] = useDrop<Item>(() => ({
       accept: 'box',
       drop: (item) => onDrop(item.name),
       collect: (monitor) => ({
@@ -162,7 +220,7 @@ function CreateBracket(){
     );
   }
 
-  const moveTeam = (name) => {
+  const moveTeam = (name: string) => {
 
     const newTeams = teams.filter((team) => name === team.name);
     const newAvailableTeams = teams.filter((team) => name !== team.name);
@@ -193,12 +251,11 @@ function CreateBracket(){
       </div>
       <div className='BracketButton'>
         <button onClick={()=> handleClick()}>Create Bracket!</button>
-        {showBracket && <Bracket rounds = {rounds}/>}
+        {showBracket && <Bracket rounds = {initalRounds}/>}
       </div>
     </>
   );
 }
-
 
 function App() {
   return (
