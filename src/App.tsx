@@ -1,5 +1,5 @@
 import './App.css';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 import {useDrag} from 'react-dnd';
@@ -40,7 +40,7 @@ function Title(){
   </div>
 }
 
-const initialTeams = [
+const initialTeams:Team[] = [
   {name: 'Alabama'},
   {name: 'Texas'},
   {name: 'Ohio State'},
@@ -107,100 +107,12 @@ function TeamSelection({name}:Team){
 //   );
 // }
 
-const fillers = [
-  {name:'Winner of Match 1'},
-  {name:'Winner of Match 2'},
-  {name:'Winner of Match 3'},
-  {name:'Winner of Match 4'},
-  {name:'Winner of Match 5'},
-  {name:'Winner of Match 6'},
-  {name:'Winner of Match 7'},
-  {name:'Winner of Match 8'},
-  {name:'Winner of Match 9'},
-  {name:'Winner of Match 10'},
-  {name:'Winner of Match 11'},
-];
+
 
 function CreateBracket(){
   const [topTeams, setTeams] = useState<Team[]>([]);
-  const [teams, setAvailableTeams] = useState(initialTeams);
-
-  const initalRounds = [
-    {name: 'Round 1'
-    ,matches: [
-      {name: 'Match 1', teams: [topTeams[11],topTeams[4]]},
-      {name: 'Match 2', teams: [topTeams[8],topTeams[7]]},
-      {name: 'Match 3', teams: [topTeams[10],topTeams[5]]},
-      {name: 'Match 4', teams: [topTeams[9],topTeams[6]]}
-    ]},
-    {name: 'Quarterfinals',
-    matches: [
-      {name: 'Match 5', teams: [fillers[0], topTeams[3]]},
-      {name: 'Match 6', teams: [fillers[1], topTeams[0]]},
-      {name: 'Match 7', teams: [fillers[2], topTeams[2]]},
-      {name: 'Match 8', teams: [ fillers[3], topTeams[1],]}
-    ]},
-    {name: 'Semifinals',
-    matches: [
-      {name: 'Match 9', teams: [fillers[4], fillers[5]]},
-      {name: 'Match 10', teams: [fillers[6], fillers[7]]}
-    ]},
-    {name: 'Championship',
-    matches: [
-      {name: 'Match 11', teams: [fillers[8], fillers[9]]}
-    ]},
-    {name: 'Champion',
-    matches: [
-      {name: 'National Champion', teams: [fillers[10]]}
-    ]
-    }
-  ];
-
-  const [rounds, setRounds] = useState<Round[]>(initalRounds);
-  function HandleClick(roundIndex: number, matchIndex: number, teamIndex: number) {
-    const newRounds = [...rounds];
-    const currentMatch = newRounds[roundIndex].matches[matchIndex];
-    const advancingTeam = currentMatch.teams[teamIndex];
-
-    if (roundIndex + 1 < newRounds.length) {
-      const nextRound = newRounds[roundIndex + 1];
-      const nextMatch = nextRound.matches.find(match => match.teams.includes(fillers[matchIndex]));
-
-      if (nextMatch) {
-        nextMatch.teams = nextMatch.teams.map(team => team.name.includes('Winner') ? advancingTeam : team);
-      }
-    }
-    setRounds(newRounds);
-  }
-
-  function Bracket ({rounds}:BracketProps) {
-    return(
-    <div className='Bracket'>
-      {rounds.map((round,roundIndex) => (
-        <div key={roundIndex} className={`round-${roundIndex}`}>
-          <h2>{round.name}</h2>
-        {round.matches.map((match,matchIndex) => (
-          <div className='Match' key={matchIndex}>
-            <h3>{match.name}</h3>
-            <div className='Teams1'>
-              {match.teams.map((team,teamIndex) => (
-                <button onClick= {()=>HandleClick(roundIndex,matchIndex,teamIndex)} className='Team' key={teamIndex}>{team.name}</button>
-              ))}
-            </div>
-          </div>
-        ))}
-        </div>
-      ))}
-    </div>
-    );
-  }
-
-  useEffect(() => {
-    if(topTeams.length === 12){
-      alert('Bracket is full!')
-    }
-  }, [topTeams]
-  );
+  const [teams, setAvailableTeams] = useState<Team[]>(initialTeams);
+  const [rounds, setRounds] = useState<Round[]>([]);
 
   function DropZone({onDrop}: DropZoneProps) {
     const [, drop] = useDrop<Item>(() => ({
@@ -220,14 +132,116 @@ function CreateBracket(){
     );
   }
 
-  const moveTeam = (name: string) => {
 
+  const initializeBracket = useCallback(() => {
+    const newRounds: Round[] = [
+      {name: 'Round 1'
+      ,matches: [
+        { name: 'Match 1', teams: [topTeams[11], topTeams[4]] },
+        { name: 'Match 2', teams: [topTeams[8], topTeams[7]] },
+        { name: 'Match 3', teams: [topTeams[10], topTeams[5]] },
+        { name: 'Match 4', teams: [topTeams[9], topTeams[6]] }
+      ]},
+      {name: 'Quarterfinals',
+      matches: [
+        { name: 'Match 5', teams: [{name: "Winner of Match 1"}, topTeams[3]]},
+        { name: 'Match 6', teams: [{name: "Winner of Match 2"}, topTeams[0]] },
+        { name: 'Match 7', teams: [{name: "Winner of Match 3"}, topTeams[2]] },
+        { name: 'Match 8', teams: [{name: "Winner of Match 4"}, topTeams[1]] }
+      ]},
+      {name: 'Semifinals',
+      matches: [
+        {name: 'Match 9', teams: [{name:"Winner of Match 5"}, {name: "Winner of Match 6"}]},
+        {name: 'Match 10', teams: [{name:"Winner of Match 7"}, {name: "Winner of Match 8"}]}
+      ]},
+      {name: 'Championship',
+      matches: [
+        {name: 'Match 11', teams: [{name: "Winner of Match 9"}, {name: "Winner of Match 10"}]}
+      ]},
+      {name: 'Champion',
+      matches: [
+        {name: 'National Champion', teams: [{name: "Winner of Match 11"}] }
+      ]
+      }
+    ];
+    setRounds(newRounds);
+  },[topTeams]);
+
+  useEffect(() => {
+    if(topTeams.length === 12){
+      initializeBracket();
+    }
+  }, [topTeams, initializeBracket]
+  );
+
+
+  const moveTeam = (name: string) => {
     const newTeams = teams.filter((team) => name === team.name);
     const newAvailableTeams = teams.filter((team) => name !== team.name);
     setTeams(topTeams => [...topTeams, newTeams[0]]);
     setAvailableTeams(newAvailableTeams);
   };
 
+  function ChooseWinner(roundIndex: number, matchIndex: number, teamIndex: number) {
+    const newRounds = [...rounds];
+    const currentRound = newRounds[roundIndex];
+    const currentMatch = newRounds[roundIndex].matches[matchIndex];
+    const advancingTeam = currentMatch.teams[teamIndex];
+    console.log(currentMatch);
+    if(!currentRound){
+      alert('invalid round');
+      return;
+    }
+    if(!currentMatch){
+      alert('invalid match');
+      return;
+    }
+    if(!advancingTeam){
+      alert('invalid team');
+      return;
+    }
+    if (roundIndex + 1 < newRounds.length) {
+      const nextRound = newRounds[roundIndex + 1];
+      var nextMatch = nextRound.matches[Math.floor(matchIndex/2)];
+      if(roundIndex === 0){
+        nextMatch = nextRound.matches[matchIndex];
+      }
+      if (nextMatch) {
+        if(roundIndex > 0){
+          if(matchIndex % 2 === 0){
+            nextMatch.teams[0] = advancingTeam;
+          }else{
+            nextMatch.teams[1] = advancingTeam;
+          }
+        }else{
+          nextMatch.teams = nextMatch.teams.map(team => team.name.includes('Winner') ? advancingTeam : team);
+        }
+      }
+    }
+    setRounds(newRounds);
+  }
+
+  function Bracket({rounds}:BracketProps) {
+    return(
+    <div className='Bracket'>
+      {rounds.map((round,roundIndex) => (
+        <div key={roundIndex} className={`round-${roundIndex}`}>
+          <h2>{round.name}</h2>
+        {round.matches.map((match,matchIndex) => (
+          <div className='Match' key={matchIndex}>
+            <h3>{match.name}</h3>
+            <div className='Teams1'>
+              {match.teams.map((team,teamIndex) => (
+                <div className='Team' key={teamIndex}><button onClick={() => ChooseWinner(roundIndex,matchIndex,teamIndex)}>{team.name}</button></div>
+              ))}
+            </div>
+          </div>
+        ))}
+        </div>
+      ))}
+    </div>
+    );
+  };
   const [showBracket, setShowBracket] = useState(false);
 
   function handleClick(){
@@ -251,7 +265,7 @@ function CreateBracket(){
       </div>
       <div className='BracketButton'>
         <button onClick={()=> handleClick()}>Create Bracket!</button>
-        {showBracket && <Bracket rounds = {initalRounds}/>}
+        {showBracket && <Bracket rounds = {rounds}/>}
       </div>
     </>
   );
